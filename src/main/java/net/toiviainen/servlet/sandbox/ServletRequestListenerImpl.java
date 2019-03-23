@@ -11,6 +11,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.annotation.WebListener;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 @WebListener("A listener to trace servlet request creation and destruction.")
 public class ServletRequestListenerImpl implements ServletRequestListener {
@@ -51,6 +53,43 @@ public class ServletRequestListenerImpl implements ServletRequestListener {
 			AsyncContext asyncContext = asyncCtx.get();
 			ctx.log("\t\tasyncTimeout      " + asyncContext.getTimeout());
 			ctx.log("\t\tasyncOriginals    " + asyncContext.hasOriginalRequestAndResponse());
+		}
+		if (request instanceof HttpServletRequest) {
+			HttpServletRequest httpRequest = (HttpServletRequest) request;
+			List<String> headerNames = Collections.list(httpRequest.getHeaderNames());
+			ctx.log("\t\tauthType          " + httpRequest.getAuthType());
+			ctx.log("\t\tcharacterEncoding " + httpRequest.getCharacterEncoding());
+			ctx.log("\t\tmethod            " + httpRequest.getMethod());
+			ctx.log("\t\tpathInfo          " + httpRequest.getPathInfo());
+			ctx.log("\t\tpathTranslated    " + httpRequest.getPathTranslated());
+			ctx.log("\t\tcontextPath       " + httpRequest.getContextPath());
+			ctx.log("\t\tqueryString       " + httpRequest.getQueryString());
+			ctx.log("\t\tremoteUser        " + httpRequest.getRemoteUser());
+			ctx.log("\t\tuserPrincipal     " + httpRequest.getUserPrincipal());
+			ctx.log("\t\trequestedSid      " + httpRequest.getRequestedSessionId());
+			ctx.log("\t\trequestURI        " + httpRequest.getRequestURI());
+			ctx.log("\t\trequestURL        " + httpRequest.getRequestURL());
+			ctx.log("\t\tservletPath       " + httpRequest.getServletPath());
+			ctx.log("\t\tisSidValid        " + httpRequest.isRequestedSessionIdValid());
+			ctx.log("\t\tisSidFromCookie   " + httpRequest.isRequestedSessionIdFromCookie());
+			ctx.log("\t\tisSidFromURL      " + httpRequest.isRequestedSessionIdFromURL());
+
+			ctx.log("\t\theaders:");
+			for (String headerName : headerNames) {
+				ctx.log("\t\t\t" + headerName + ": " + Collections.list(httpRequest.getHeaders(headerName)));
+			}
+
+			ctx.log("\t\tcookies:");
+			for (Cookie cookie : httpRequest.getCookies()) {
+				ctx.log("\t\t\tname    " + cookie.getName());
+				ctx.log("\t\t\tdomain  " + cookie.getDomain());
+				ctx.log("\t\t\tmaxAge  " + cookie.getMaxAge());
+				ctx.log("\t\t\tpath    " + cookie.getPath());
+				ctx.log("\t\t\tvalue   " + cookie.getValue());
+				ctx.log("\t\t\tversion " + cookie.getVersion());
+				ctx.log("\t\t\tsecure  " + cookie.getSecure());
+				ctx.log("");
+			}
 		}
 	}
 
