@@ -1,12 +1,15 @@
 package net.toiviainen.servlet.sandbox;
 
 import java.io.IOException;
+import java.time.Instant;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /*
  * @WebServlet annotation attributes.
@@ -27,6 +30,13 @@ public class SandboxHttpServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		ServletContext ctx = getServletContext();
+
+		// debug and refresh HTTP session value each time we arrive.
+		HttpSession session = req.getSession();
+		ctx.log("A value from HTTP session: " + session.getAttribute("foo"));
+		session.setAttribute("foo", Instant.now());
+
 		resp.setStatus(HttpServletResponse.SC_OK);
 	}
 
