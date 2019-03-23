@@ -25,6 +25,7 @@ public class ServletRequestListenerImpl implements ServletRequestListener {
 		List<String> parameterNames = Collections.list(request.getParameterNames());
 
 		ctx.log("Servlet request initialized with the following structure");
+		ctx.log("\t\tclass             " + request.getClass());
 		ctx.log("\t\tcharacterEncoding " + request.getCharacterEncoding());
 		ctx.log("\t\tcontentLength     " + request.getContentLength());
 		ctx.log("\t\tcontentLengthLong " + request.getContentLengthLong());
