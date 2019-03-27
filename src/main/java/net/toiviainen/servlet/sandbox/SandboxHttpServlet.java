@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
  * displayName......Servlet's display name.
  */
 @SuppressWarnings("serial")
-@WebServlet(name = "sandbox servlet name", value = "sandbox", loadOnStartup = 1, asyncSupported = true)
+@WebServlet(name = "sandbox servlet name", value = "/*", loadOnStartup = 1, asyncSupported = true)
 public class SandboxHttpServlet extends HttpServlet {
 
 	@Override
