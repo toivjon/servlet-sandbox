@@ -80,15 +80,17 @@ public class ServletRequestListenerImpl implements ServletRequestListener {
 			}
 
 			ctx.log("\t\tcookies:");
-			for (Cookie cookie : httpRequest.getCookies()) {
-				ctx.log("\t\t\tname    " + cookie.getName());
-				ctx.log("\t\t\tdomain  " + cookie.getDomain());
-				ctx.log("\t\t\tmaxAge  " + cookie.getMaxAge());
-				ctx.log("\t\t\tpath    " + cookie.getPath());
-				ctx.log("\t\t\tvalue   " + cookie.getValue());
-				ctx.log("\t\t\tversion " + cookie.getVersion());
-				ctx.log("\t\t\tsecure  " + cookie.getSecure());
-				ctx.log("");
+			if (httpRequest.getCookies() != null) {
+				for (Cookie cookie : httpRequest.getCookies()) {
+					ctx.log("\t\t\tname    " + cookie.getName());
+					ctx.log("\t\t\tdomain  " + cookie.getDomain());
+					ctx.log("\t\t\tmaxAge  " + cookie.getMaxAge());
+					ctx.log("\t\t\tpath    " + cookie.getPath());
+					ctx.log("\t\t\tvalue   " + cookie.getValue());
+					ctx.log("\t\t\tversion " + cookie.getVersion());
+					ctx.log("\t\t\tsecure  " + cookie.getSecure());
+					ctx.log("");
+				}
 			}
 		}
 	}
