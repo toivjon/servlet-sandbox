@@ -29,8 +29,6 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "sandbox servlet name", value = "/", loadOnStartup = 1, asyncSupported = true)
 public class SandboxHttpServlet extends HttpServlet {
 
-	// http://alibassam.com/everything-new-servlet-4-0/
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.out.println("SandboxHttpServlet#doGet");
