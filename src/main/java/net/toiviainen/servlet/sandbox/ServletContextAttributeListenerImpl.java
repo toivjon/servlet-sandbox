@@ -1,6 +1,5 @@
 package net.toiviainen.servlet.sandbox;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.annotation.WebListener;
@@ -8,28 +7,28 @@ import javax.servlet.annotation.WebListener;
 @WebListener("A listener to trace servlet context attribute changes.")
 public class ServletContextAttributeListenerImpl implements ServletContextAttributeListener {
 
+	private static final String LOG_PREFIX = String.format("[%s] ",
+			ServletContextAttributeListenerImpl.class.getSimpleName());
+
 	/** The pattern used to print the servlet context attribute. */
 	private static final String ATTRIBUTE_PATTERN = "%s : %s";
 
 	@Override
 	public void attributeAdded(ServletContextAttributeEvent event) {
-		ServletContext ctx = event.getServletContext();
-		ctx.log("ServletContext attribute added");
-		ctx.log("\t\t" + attribute(event));
+		System.out.println(LOG_PREFIX + "ServletContext attribute added");
+		System.out.println(LOG_PREFIX + "\t\t" + attribute(event));
 	}
 
 	@Override
 	public void attributeRemoved(ServletContextAttributeEvent event) {
-		ServletContext ctx = event.getServletContext();
-		ctx.log("ServletContext attribute removed");
-		ctx.log("\t\t" + attribute(event));
+		System.out.println(LOG_PREFIX + "ServletContext attribute removed");
+		System.out.println(LOG_PREFIX + "\t\t" + attribute(event));
 	}
 
 	@Override
 	public void attributeReplaced(ServletContextAttributeEvent event) {
-		ServletContext ctx = event.getServletContext();
-		ctx.log("ServletContext attribute replaced");
-		ctx.log("\t\t" + attribute(event));
+		System.out.println(LOG_PREFIX + "ServletContext attribute replaced");
+		System.out.println(LOG_PREFIX + "\t\t" + attribute(event));
 	}
 
 	/**

@@ -17,6 +17,8 @@ import javax.servlet.annotation.WebListener;
 @WebListener("A listener to trace servlet context creation and destruction.")
 public class ServletContextListenerImpl implements ServletContextListener {
 
+	private static final String LOG_PREFIX = String.format("[%s] ", ServletContextListenerImpl.class.getSimpleName());
+
 	/** A pattern to be used to print out servlet version strings. */
 	private static final String VERSION_PATTERN = "%d.%d";
 
@@ -29,47 +31,50 @@ public class ServletContextListenerImpl implements ServletContextListener {
 		SessionCookieConfig sessionCookieConfig = ctx.getSessionCookieConfig();
 		List<String> initParameterNames = Collections.list(ctx.getInitParameterNames());
 
-		ctx.log("ServletContext initialized with the following environment");
-		ctx.log("\t\tcontextPath                   " + ctx.getContextPath());
-		ctx.log("\t\tversion                       " + version(ctx));
-		ctx.log("\t\teffectiveVersion              " + effectiveVersion(ctx));
-		ctx.log("\t\tserverInfo                    " + ctx.getServerInfo());
-		ctx.log("\t\tservletContextName            " + ctx.getServletContextName());
-		ctx.log("\t\tvirtualServerName             " + ctx.getVirtualServerName());
-		ctx.log("\t\tdefaultSessionTrackingModes   " + ctx.getDefaultSessionTrackingModes());
-		ctx.log("\t\teffectiveSessionTrackingModes " + ctx.getEffectiveSessionTrackingModes());
-		ctx.log("\t\tservletRegistrations          " + servlets.size());
-		ctx.log("\t\tfilterRegistrations           " + filters.size());
-		ctx.log("\t\tsessionCookieName             " + sessionCookieConfig.getName());
-		ctx.log("\t\tsessionCookieMaxAge           " + sessionCookieConfig.getMaxAge());
-		ctx.log("\t\tsessionCookieDomain           " + sessionCookieConfig.getDomain());
-		ctx.log("\t\tsessionCookiePath             " + sessionCookieConfig.getPath());
-		ctx.log("\t\tsessionCookieComment          " + sessionCookieConfig.getComment());
-		ctx.log("\t\tinitParameterNames            " + initParameterNames);
+		System.out.println(LOG_PREFIX + "ServletContext initialized with the following environment");
+		System.out.println(LOG_PREFIX + "\t\tcontextPath                   " + ctx.getContextPath());
+		System.out.println(LOG_PREFIX + "\t\tversion                       " + version(ctx));
+		System.out.println(LOG_PREFIX + "\t\teffectiveVersion              " + effectiveVersion(ctx));
+		System.out.println(LOG_PREFIX + "\t\tserverInfo                    " + ctx.getServerInfo());
+		System.out.println(LOG_PREFIX + "\t\tservletContextName            " + ctx.getServletContextName());
+		System.out.println(LOG_PREFIX + "\t\tvirtualServerName             " + ctx.getVirtualServerName());
+		System.out.println(LOG_PREFIX + "\t\tdefaultSessionTrackingModes   " + ctx.getDefaultSessionTrackingModes());
+		System.out.println(LOG_PREFIX + "\t\teffectiveSessionTrackingModes " + ctx.getEffectiveSessionTrackingModes());
+		System.out.println(LOG_PREFIX + "\t\tservletRegistrations          " + servlets.size());
+		System.out.println(LOG_PREFIX + "\t\tfilterRegistrations           " + filters.size());
+		System.out.println(LOG_PREFIX + "\t\tsessionCookieName             " + sessionCookieConfig.getName());
+		System.out.println(LOG_PREFIX + "\t\tsessionCookieMaxAge           " + sessionCookieConfig.getMaxAge());
+		System.out.println(LOG_PREFIX + "\t\tsessionCookieDomain           " + sessionCookieConfig.getDomain());
+		System.out.println(LOG_PREFIX + "\t\tsessionCookiePath             " + sessionCookieConfig.getPath());
+		System.out.println(LOG_PREFIX + "\t\tsessionCookieComment          " + sessionCookieConfig.getComment());
+		System.out.println(LOG_PREFIX + "\t\tinitParameterNames            " + initParameterNames);
 
 		// print all registered servlet instances along with their base information.
 		for (ServletRegistration registration : servlets.values()) {
-			ctx.log("\t\tServlet");
-			ctx.log("\t\t\tname      " + registration.getName());
-			ctx.log("\t\t\tclass     " + registration.getClassName());
-			ctx.log("\t\t\trunAsRole " + registration.getRunAsRole());
-			ctx.log("\t\t\tmappings  " + registration.getMappings());
+			System.out.println(LOG_PREFIX + "\t\tServlet");
+			System.out.println(LOG_PREFIX + "\t\t\tname      " + registration.getName());
+			System.out.println(LOG_PREFIX + "\t\t\tclass     " + registration.getClassName());
+			System.out.println(LOG_PREFIX + "\t\t\trunAsRole " + registration.getRunAsRole());
+			System.out.println(LOG_PREFIX + "\t\t\tmappings  " + registration.getMappings());
 		}
 
 		// print all registered servlet filters along with their base information.
 		for (FilterRegistration registration : filters.values()) {
-			ctx.log("\t\tFilter");
-			ctx.log("\t\t\tname                " + registration.getName());
-			ctx.log("\t\t\tclassName           " + registration.getClassName());
-			ctx.log("\t\t\tservletNameMappings " + registration.getServletNameMappings());
-			ctx.log("\t\t\turlPatternMappings  " + registration.getUrlPatternMappings());
+			System.out.println(LOG_PREFIX + "\t\tFilter");
+			System.out.println(LOG_PREFIX + "\t\t\tname                " + registration.getName());
+			System.out.println(LOG_PREFIX + "\t\t\tclassName           " + registration.getClassName());
+			System.out.println(LOG_PREFIX + "\t\t\tservletNameMappings " + registration.getServletNameMappings());
+			System.out.println(LOG_PREFIX + "\t\t\turlPatternMappings  " + registration.getUrlPatternMappings());
 		}
+
+		// specify session timeout (4.0 specific addition).
+		ctx.setSessionTimeout(1);
+
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		ServletContext ctx = sce.getServletContext();
-		ctx.log("ServletContext destroyed");
+		System.out.println(LOG_PREFIX + "ServletContext destroyed");
 	}
 
 	/**

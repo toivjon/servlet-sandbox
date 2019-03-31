@@ -1,6 +1,5 @@
 package net.toiviainen.servlet.sandbox;
 
-import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionAttributeListener;
@@ -9,6 +8,8 @@ import javax.servlet.http.HttpSessionBindingEvent;
 @WebListener("A listener to trace HTTP session attribute changes.")
 public class HttpSessionAttributeListenerImpl implements HttpSessionAttributeListener {
 
+	private static final String LOG_PREFIX = String.format("[%s] ", FilterImpl.class.getSimpleName());
+
 	/** The pattern used to print the servlet context attribute. */
 	private static final String ATTRIBUTE_PATTERN = "%s : %s";
 
@@ -16,27 +17,24 @@ public class HttpSessionAttributeListenerImpl implements HttpSessionAttributeLis
 	public void attributeAdded(HttpSessionBindingEvent event) {
 		HttpSession session = event.getSession();
 		String sessionId = session.getId();
-		ServletContext ctx = session.getServletContext();
-		ctx.log("HttpSession " + sessionId + " attribute added");
-		ctx.log("\t\t" + attribute(event));
+		System.out.println(LOG_PREFIX + "HttpSession " + sessionId + " attribute added");
+		System.out.println(LOG_PREFIX + "\t\t" + attribute(event));
 	}
 
 	@Override
 	public void attributeRemoved(HttpSessionBindingEvent event) {
 		HttpSession session = event.getSession();
 		String sessionId = session.getId();
-		ServletContext ctx = session.getServletContext();
-		ctx.log("HttpSession " + sessionId + " attribute removed");
-		ctx.log("\t\t" + attribute(event));
+		System.out.println(LOG_PREFIX + "HttpSession " + sessionId + " attribute removed");
+		System.out.println(LOG_PREFIX + "\t\t" + attribute(event));
 	}
 
 	@Override
 	public void attributeReplaced(HttpSessionBindingEvent event) {
 		HttpSession session = event.getSession();
 		String sessionId = session.getId();
-		ServletContext ctx = session.getServletContext();
-		ctx.log("HttpSession " + sessionId + " attribute replaced");
-		ctx.log("\t\t" + attribute(event));
+		System.out.println(LOG_PREFIX + "HttpSession " + sessionId + " attribute replaced");
+		System.out.println(LOG_PREFIX + "\t\t" + attribute(event));
 	}
 
 	/**

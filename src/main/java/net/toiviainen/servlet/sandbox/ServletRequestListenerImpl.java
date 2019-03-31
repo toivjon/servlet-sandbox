@@ -6,7 +6,6 @@ import java.util.Locale;
 import java.util.Optional;
 
 import javax.servlet.AsyncContext;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
@@ -17,79 +16,81 @@ import javax.servlet.http.HttpServletRequest;
 @WebListener("A listener to trace servlet request creation and destruction.")
 public class ServletRequestListenerImpl implements ServletRequestListener {
 
+	private static final String LOG_PREFIX = String.format("[%s] ", ServletRequestListenerImpl.class.getSimpleName());
+
 	@Override
 	public void requestInitialized(ServletRequestEvent sre) {
 		// get a reference to servlet request contents.
-		ServletContext ctx = sre.getServletContext();
 		ServletRequest request = sre.getServletRequest();
 		Optional<AsyncContext> asyncCtx = safeGetAsyncContext(request);
 		List<Locale> locales = Collections.list(request.getLocales());
 		List<String> parameterNames = Collections.list(request.getParameterNames());
 
-		ctx.log("Servlet request initialized with the following structure");
-		ctx.log("\t\tclass             " + request.getClass());
-		ctx.log("\t\tcharacterEncoding " + request.getCharacterEncoding());
-		ctx.log("\t\tcontentLength     " + request.getContentLength());
-		ctx.log("\t\tcontentLengthLong " + request.getContentLengthLong());
-		ctx.log("\t\tcontentType       " + request.getContentType());
-		ctx.log("\t\tlocalAddr         " + request.getLocalAddr());
-		ctx.log("\t\tlocalName         " + request.getLocalName());
-		ctx.log("\t\tlocalPort         " + request.getLocalPort());
-		ctx.log("\t\tprotocol          " + request.getProtocol());
-		ctx.log("\t\tremoteAddr        " + request.getRemoteAddr());
-		ctx.log("\t\tremoteHost        " + request.getRemoteHost());
-		ctx.log("\t\tremotePort        " + request.getRemotePort());
-		ctx.log("\t\tscheme            " + request.getScheme());
-		ctx.log("\t\tserverName		   " + request.getServerName());
-		ctx.log("\t\tserverPort        " + request.getServerPort());
-		ctx.log("\t\tisSecure          " + request.isSecure());
-		ctx.log("\t\tisAsyncStarted    " + request.isAsyncStarted());
-		ctx.log("\t\tisAsyncSupported  " + request.isAsyncSupported());
-		ctx.log("\t\tlocales           " + locales);
-		ctx.log("\t\tpreferredLocale   " + request.getLocale());
-		ctx.log("\t\tparameterNames    " + parameterNames);
-		ctx.log("\t\tdispatcherType    " + request.getDispatcherType());
+		System.out.println(LOG_PREFIX + "Servlet request initialized with the following structure");
+		System.out.println(LOG_PREFIX + "\t\tclass             " + request.getClass());
+		System.out.println(LOG_PREFIX + "\t\tcharacterEncoding " + request.getCharacterEncoding());
+		System.out.println(LOG_PREFIX + "\t\tcontentLength     " + request.getContentLength());
+		System.out.println(LOG_PREFIX + "\t\tcontentLengthLong " + request.getContentLengthLong());
+		System.out.println(LOG_PREFIX + "\t\tcontentType       " + request.getContentType());
+		System.out.println(LOG_PREFIX + "\t\tlocalAddr         " + request.getLocalAddr());
+		System.out.println(LOG_PREFIX + "\t\tlocalName         " + request.getLocalName());
+		System.out.println(LOG_PREFIX + "\t\tlocalPort         " + request.getLocalPort());
+		System.out.println(LOG_PREFIX + "\t\tprotocol          " + request.getProtocol());
+		System.out.println(LOG_PREFIX + "\t\tremoteAddr        " + request.getRemoteAddr());
+		System.out.println(LOG_PREFIX + "\t\tremoteHost        " + request.getRemoteHost());
+		System.out.println(LOG_PREFIX + "\t\tremotePort        " + request.getRemotePort());
+		System.out.println(LOG_PREFIX + "\t\tscheme            " + request.getScheme());
+		System.out.println(LOG_PREFIX + "\t\tserverName		   " + request.getServerName());
+		System.out.println(LOG_PREFIX + "\t\tserverPort        " + request.getServerPort());
+		System.out.println(LOG_PREFIX + "\t\tisSecure          " + request.isSecure());
+		System.out.println(LOG_PREFIX + "\t\tisAsyncStarted    " + request.isAsyncStarted());
+		System.out.println(LOG_PREFIX + "\t\tisAsyncSupported  " + request.isAsyncSupported());
+		System.out.println(LOG_PREFIX + "\t\tlocales           " + locales);
+		System.out.println(LOG_PREFIX + "\t\tpreferredLocale   " + request.getLocale());
+		System.out.println(LOG_PREFIX + "\t\tparameterNames    " + parameterNames);
+		System.out.println(LOG_PREFIX + "\t\tdispatcherType    " + request.getDispatcherType());
 		if (asyncCtx.isPresent()) {
 			AsyncContext asyncContext = asyncCtx.get();
-			ctx.log("\t\tasyncTimeout      " + asyncContext.getTimeout());
-			ctx.log("\t\tasyncOriginals    " + asyncContext.hasOriginalRequestAndResponse());
+			System.out.println(LOG_PREFIX + "\t\tasyncTimeout      " + asyncContext.getTimeout());
+			System.out.println(LOG_PREFIX + "\t\tasyncOriginals    " + asyncContext.hasOriginalRequestAndResponse());
 		}
 		if (request instanceof HttpServletRequest) {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			List<String> headerNames = Collections.list(httpRequest.getHeaderNames());
-			ctx.log("\t\tauthType          " + httpRequest.getAuthType());
-			ctx.log("\t\tcharacterEncoding " + httpRequest.getCharacterEncoding());
-			ctx.log("\t\tmethod            " + httpRequest.getMethod());
-			ctx.log("\t\tpathInfo          " + httpRequest.getPathInfo());
-			ctx.log("\t\tpathTranslated    " + httpRequest.getPathTranslated());
-			ctx.log("\t\tcontextPath       " + httpRequest.getContextPath());
-			ctx.log("\t\tqueryString       " + httpRequest.getQueryString());
-			ctx.log("\t\tremoteUser        " + httpRequest.getRemoteUser());
-			ctx.log("\t\tuserPrincipal     " + httpRequest.getUserPrincipal());
-			ctx.log("\t\trequestedSid      " + httpRequest.getRequestedSessionId());
-			ctx.log("\t\trequestURI        " + httpRequest.getRequestURI());
-			ctx.log("\t\trequestURL        " + httpRequest.getRequestURL());
-			ctx.log("\t\tservletPath       " + httpRequest.getServletPath());
-			ctx.log("\t\tisSidValid        " + httpRequest.isRequestedSessionIdValid());
-			ctx.log("\t\tisSidFromCookie   " + httpRequest.isRequestedSessionIdFromCookie());
-			ctx.log("\t\tisSidFromURL      " + httpRequest.isRequestedSessionIdFromURL());
+			System.out.println(LOG_PREFIX + "\t\tauthType          " + httpRequest.getAuthType());
+			System.out.println(LOG_PREFIX + "\t\tcharacterEncoding " + httpRequest.getCharacterEncoding());
+			System.out.println(LOG_PREFIX + "\t\tmethod            " + httpRequest.getMethod());
+			System.out.println(LOG_PREFIX + "\t\tpathInfo          " + httpRequest.getPathInfo());
+			System.out.println(LOG_PREFIX + "\t\tpathTranslated    " + httpRequest.getPathTranslated());
+			System.out.println(LOG_PREFIX + "\t\tcontextPath       " + httpRequest.getContextPath());
+			System.out.println(LOG_PREFIX + "\t\tqueryString       " + httpRequest.getQueryString());
+			System.out.println(LOG_PREFIX + "\t\tremoteUser        " + httpRequest.getRemoteUser());
+			System.out.println(LOG_PREFIX + "\t\tuserPrincipal     " + httpRequest.getUserPrincipal());
+			System.out.println(LOG_PREFIX + "\t\trequestedSid      " + httpRequest.getRequestedSessionId());
+			System.out.println(LOG_PREFIX + "\t\trequestURI        " + httpRequest.getRequestURI());
+			System.out.println(LOG_PREFIX + "\t\trequestURL        " + httpRequest.getRequestURL());
+			System.out.println(LOG_PREFIX + "\t\tservletPath       " + httpRequest.getServletPath());
+			System.out.println(LOG_PREFIX + "\t\tisSidValid        " + httpRequest.isRequestedSessionIdValid());
+			System.out.println(LOG_PREFIX + "\t\tisSidFromCookie   " + httpRequest.isRequestedSessionIdFromCookie());
+			System.out.println(LOG_PREFIX + "\t\tisSidFromURL      " + httpRequest.isRequestedSessionIdFromURL());
 
-			ctx.log("\t\theaders:");
+			System.out.println(LOG_PREFIX + "\t\theaders:");
 			for (String headerName : headerNames) {
-				ctx.log("\t\t\t" + headerName + ": " + Collections.list(httpRequest.getHeaders(headerName)));
+				System.out.println(LOG_PREFIX + "\t\t\t" + headerName + ": "
+						+ Collections.list(httpRequest.getHeaders(headerName)));
 			}
 
-			ctx.log("\t\tcookies:");
+			System.out.println(LOG_PREFIX + "\t\tcookies:");
 			if (httpRequest.getCookies() != null) {
 				for (Cookie cookie : httpRequest.getCookies()) {
-					ctx.log("\t\t\tname    " + cookie.getName());
-					ctx.log("\t\t\tdomain  " + cookie.getDomain());
-					ctx.log("\t\t\tmaxAge  " + cookie.getMaxAge());
-					ctx.log("\t\t\tpath    " + cookie.getPath());
-					ctx.log("\t\t\tvalue   " + cookie.getValue());
-					ctx.log("\t\t\tversion " + cookie.getVersion());
-					ctx.log("\t\t\tsecure  " + cookie.getSecure());
-					ctx.log("");
+					System.out.println(LOG_PREFIX + "\t\t\tname    " + cookie.getName());
+					System.out.println(LOG_PREFIX + "\t\t\tdomain  " + cookie.getDomain());
+					System.out.println(LOG_PREFIX + "\t\t\tmaxAge  " + cookie.getMaxAge());
+					System.out.println(LOG_PREFIX + "\t\t\tpath    " + cookie.getPath());
+					System.out.println(LOG_PREFIX + "\t\t\tvalue   " + cookie.getValue());
+					System.out.println(LOG_PREFIX + "\t\t\tversion " + cookie.getVersion());
+					System.out.println(LOG_PREFIX + "\t\t\tsecure  " + cookie.getSecure());
+					System.out.println(LOG_PREFIX + "");
 				}
 			}
 		}
@@ -97,8 +98,7 @@ public class ServletRequestListenerImpl implements ServletRequestListener {
 
 	@Override
 	public void requestDestroyed(ServletRequestEvent sre) {
-		ServletContext ctx = sre.getServletContext();
-		ctx.log("Servlet request destructed");
+		System.out.println(LOG_PREFIX + "Servlet request destructed");
 	}
 
 	/**
