@@ -25,7 +25,7 @@ import javax.servlet.http.PushBuilder;
  * displayName......Servlet's display name.
  */
 @SuppressWarnings("serial")
-@WebServlet(name = "sandbox servlet name", value = "/", loadOnStartup = 1, asyncSupported = true)
+@WebServlet(name = "sandbox servlet name", value = "/test", loadOnStartup = 1, asyncSupported = true)
 public class SandboxHttpServlet extends HttpServlet {
 
 	private static final String LOG_PREFIX = String.format("[%s] ", SandboxHttpServlet.class.getSimpleName());
