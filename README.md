@@ -17,4 +17,10 @@ Servlet 4.0 API does add the following features in servlet contexts.
 - {Get|Set} response character encoding.
 - Programmatically add a JSP page.
 
+## Some notes about server PUSH
+Servlet 4.0 API does grant access to HTML/2 server PUSH feature.
+
+- PushBuilder HttpServletRequest#newPushBuilder()
+- Can be used to aid send resources to client pre-emptively.
+
 
